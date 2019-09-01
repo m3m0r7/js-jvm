@@ -1,0 +1,33 @@
+<!DOCType html>
+<html>
+<head>
+  <script src="./DebugTool.js"></script>
+  <script src="./BinaryStream.js"></script>
+  <script src="./utility.js"></script>
+  <script src="./classes.js"></script>
+  <script src="./analyzer.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', (e) => {
+      document.querySelector('#class').addEventListener('change', (e) => {
+        const files = e.target.files;
+        for (const file of files) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            const javaClass = (new Analyzer(
+              new Uint8Array(e.target.result),
+              document)
+            ).analyze();
+
+            javaClass.call('main');
+          };
+          reader.readAsArrayBuffer(file);
+        }
+      })
+    });
+  </script>
+</head>
+<body>
+  <input id="class" type="file">
+  <div id="output"></div>
+</body>
+</html>
